@@ -27,6 +27,8 @@
       width:100%;
       height:100%;
       object-fit:contain;
+      user-select:none;
+      -webkit-user-drag:none;
     }
 
     .error{
@@ -39,38 +41,42 @@
 
 <body>
 
-<img id="viewer">
+  <img id="viewer" alt="Image Viewer">
 
-<script>
+  <script>
 
-const params = new URLSearchParams(window.location.search);
-const imageId = params.get("img") || "001";
+    const params = new URLSearchParams(window.location.search);
 
-const viewer = document.getElementById("viewer");
+    // Default image
+    const imageId = params.get("img") || "001";
 
-const formats = ["jpg","png","jpeg"];
+    const viewer = document.getElementById("viewer");
 
-let current = 0;
+    // Supported formats
+    const formats = ["jpg", "png", "jpeg"];
 
-function loadImage() {
+    let current = 0;
 
-  if(current >= formats.length){
-    document.body.innerHTML =
-      '<div class="error">Image not found</div>';
-    return;
-  }
+    function loadImage() {
 
-  viewer.src = `images/${imageId}.${formats[current]}`;
+      if(current >= formats.length){
+        document.body.innerHTML =
+          '<div class="error">Image not found</div>';
+        return;
+      }
 
-  viewer.onerror = () => {
-    current++;
+      // YOUR IMAGE FORMAT
+      viewer.src = `images/image${imageId}.${formats[current]}`;
+
+      viewer.onerror = () => {
+        current++;
+        loadImage();
+      };
+    }
+
     loadImage();
-  };
-}
 
-loadImage();
-
-</script>
+  </script>
 
 </body>
 </html>
